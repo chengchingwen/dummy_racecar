@@ -15,6 +15,16 @@ void sevseg(int n);
 
 #ifdef ARM
 void init_lcd();
-void print_time(time_t start, lcd_write_info_t * lcd);
-void draw_map(Map m, lcd_write_info_t * lcd);
 #endif
+
+void print_time(time_t start
+#ifdef ARM
+                ,lcd_write_info_t * lcd
+#endif
+                );
+void draw_map(Map m
+#ifdef ARM
+              ,lcd_write_info_t * lcd
+#endif
+              );
+

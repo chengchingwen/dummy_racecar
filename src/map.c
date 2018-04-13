@@ -37,14 +37,14 @@ void print_map(Map m){
 Map rand_map(){
   int l, sn, cn;
   l = rand() % MAXMAPLENGTH;
-  sn = rand() % 5;
+  sn = rand() % 5 + 10;
   cn = rand() % 3 + 1;
   Map m = map(l, sn, cn, rand_car());
   for (int i=1;i<m.car_num;i++)
     m.cars[i] = rand_car();
   m.states = malloc(m.state_num * sizeof(State));
   for (int i=0;i<m.state_num;i++)
-    m.states[i] = rand_state(100,10);
+    m.states[i] = rand_state(1000,10);
   return m;
 }
 
@@ -112,6 +112,7 @@ int move_car(Map m, int c, int si){
     case RAINING:
       if (!has_attr(m.cars[c], WATER_PROOF)){
         speed = ((rand() % 6 + 1) * speed) / 3;
+        m.cars[c].bias += rand() % 3 -1;
       }
       else{
         speed = ((rand() % 2 + 1) * speed);

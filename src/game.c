@@ -12,16 +12,17 @@ int fd;
 void run(Map m){
   // prepare for the game start
   //bla bla blah
+  time_t start;
 #ifdef ARM
   lcd_write_info_t lcd;
-  time_t start;
   if((fd = open(”/dev/lcd”, ORDWR)) < 0){
     printf(”Open /dev/lcd faild.\n”);
     exit(-1);
   }
-  time( &start);
   init_lcd();
 #endif
+
+  time( &start);
   while (1){
     //each car move
     for(int c=0;c<m.car_num;c++){
@@ -33,11 +34,14 @@ void run(Map m){
     print_time(start, &lcd);
     draw_map(m, &lcd);
 #else
-    print_map(m);
-    printf("\n\n");
+    print_time(start);
+    draw_map(m);
 #endif
-    sleep(0.5);
+    usleep(200000);
     if (end(m)){
+#ifndef ARM
+      printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+#endif
       return ;
     }
   }

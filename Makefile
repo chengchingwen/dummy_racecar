@@ -7,11 +7,9 @@ INCDIR = header
 CC = gcc
 CFLAG = -I$(INCDIR) -Wall -g
 
-TARGET = state car attribute map control game
+TARGET = state car attribute map control game display
 OBJ = $(TARGET:%=$(OBJDIR)/%.o)
 SRC = $(TARGET:%=$(SRCDIR)/%.c)
-# TEST = $(TARGET:%=test/test_%.c)
-# TBIN = $(TEST:test/%.c=%)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAG) -o $@ -c $<
@@ -40,7 +38,7 @@ test_map: test/test_map.c $(OBJ)
 	@rm ./$@
 
 test_game: test/test_game.c $(OBJ)
-	$(CC) $(CFLAG) -o $@  $^ 
+	$(CC) $(CFLAG) -o $@  $^
 	@./$@
 	@rm ./$@
 

@@ -77,10 +77,10 @@ void update_car(Car * cp, CONTROL ctrl){
     delta_x = -(cp->max_speed / 10);
     break;
   case RIGHT:
-    delta_y = +2;
+    delta_y = +1;
     break;
   case LEFT:
-    delta_y = -2;
+    delta_y = -1;
     break;
   default:
     break;
@@ -93,7 +93,7 @@ void update_car(Car * cp, CONTROL ctrl){
   else if (cp->speed < 0){
     cp->speed = 0;
   }
-  if (abs(cp->bias) > MAXMAPWIDTH){
+  if (abs(cp->bias + (MAXMAPWIDTH/2)) > MAXMAPWIDTH){
     cp->bias /= cp->bias;
     cp->bias *= MAXMAPWIDTH;
   }
