@@ -5,7 +5,7 @@ typedef enum{
   NULL_ATTR,
   SPEED_UP,
   WATER_PROOF,
-  NAIVGATE,
+  NAVIGATE,
   FUEL_EFFICIENT,
   JET_PACK
 }Attr_type;

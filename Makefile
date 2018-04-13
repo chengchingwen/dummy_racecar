@@ -5,9 +5,9 @@ SRCDIR = src
 INCDIR = header
 
 CC = gcc
-CFLAG = -I$(INCDIR) -Wall
+CFLAG = -I$(INCDIR) -Wall -g
 
-TARGET = state car attribute
+TARGET = state car attribute map control game
 OBJ = $(TARGET:%=$(OBJDIR)/%.o)
 SRC = $(TARGET:%=$(SRCDIR)/%.c)
 # TEST = $(TARGET:%=test/test_%.c)
@@ -17,7 +17,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAG) -o $@ -c $<
 
 all: $(OBJ)
-	$(CC) bin/car.o test/test_car.c
+	@echo $(OBJ)
 
 $(OBJ): | $(OBJDIR)
 
@@ -26,11 +26,21 @@ $(OBJDIR):
 
 test_%:  test/test_%.c $(OBJDIR)/%.o
 	$(CC) $(CFLAG) $^ -o $@
-	./$@
-	rm ./$@
+	@./$@
+	@rm ./$@
 
-test_car: test/test_car.c $(OBJ)
+test_car: test/test_car.c $(OBJDIR)/car.o $(OBJDIR)/attribute.o $(OBJDIR)/control.o
 	$(CC) $(CFLAG) -o $@  $^
+	@./$@
+	@rm ./$@
+
+test_map: test/test_map.c $(OBJ)
+	$(CC) $(CFLAG) -o $@  $^
+	@./$@
+	@rm ./$@
+
+test_game: test/test_game.c $(OBJ)
+	$(CC) $(CFLAG) -o $@  $^ 
 	@./$@
 	@rm ./$@
 

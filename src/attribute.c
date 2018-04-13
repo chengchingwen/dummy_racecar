@@ -21,8 +21,8 @@ void print_attr(Attr a){
     printf("SPEED\n");break;
   case WATER_PROOF:
     printf("WATER PROOF\n");break;
-  case NAIVGATE:
-    printf("NAIVGATE\n");break;
+  case NAVIGATE:
+    printf("NAVIGATE\n");break;
   case FUEL_EFFICIENT:
     printf("FUEL_EFFICIENT\n");break;
   case JET_PACK:

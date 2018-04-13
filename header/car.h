@@ -1,8 +1,11 @@
 #pragma once
+#include "param.h"
 #include "attribute.h"
+#include "control.h"
+
+
 
 typedef enum{
-  START_UP,
   RUNNING,
   LOST,
   END
@@ -27,6 +30,9 @@ Car init_car(int l,
              Attr a2);
 
 Car car(Attr a1, Attr a2);
+Car rand_state_car();
 Car rand_car();
 void print_phase(Car_phase p);
 void print_car(Car c);
+int has_attr(Car c, Attr_type at);
+void update_car(Car * cp, CONTROL ctrl);
