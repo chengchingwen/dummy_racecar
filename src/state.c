@@ -19,10 +19,10 @@ State state(int o,
 State rand_state(int maplength, int mapwidth){
   int r, o, b, w, l;
   r = rand() % STATETYPENUM;
-  o = rand() % maplength + 30;
-  b = rand() % (mapwidth - 3) - (mapwidth / 2);
-  w = (rand() % mapwidth + (rand() % 2 + 2)) % mapwidth;
-  l = (rand() % 50 + (rand() % 3 + 3)) % maplength;
+  o = (rand() % (maplength -50)) + 50;
+  b = rand() % mapwidth - (mapwidth / 2) ;
+  w = rand() % (mapwidth/2 - 3) + 1;
+  l = rand() % 10 + 20;
   return state(o, b, w, l, r);
 }
 

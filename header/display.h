@@ -9,6 +9,10 @@
 #include "param.h"
 #include "map.h"
 
+#define LINE( dpbuffer, n, line) \
+  for (int i=0; i<16; i++) \
+    dpbuffer[n][i] = line[i];
+
 
 void spark_led();
 void sevseg(int n);

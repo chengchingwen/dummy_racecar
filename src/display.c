@@ -3,6 +3,12 @@
 #include<time.h>
 #include "display.h"
 
+char STARTL[16] = "+=====START=====";
+char FINALL[16] = "+=====FINAL=====";
+char LOSTL1[16] = "================";
+char LOSTL2[16] = "=     LOST     =";
+char LOSTL3[16] = "================";
+
 void spark_led(){
 #ifdef ARM
   static unsigned short data;
@@ -59,11 +65,11 @@ void draw_map(Map m
               ,lcd_write_info_t * lcd
 #endif
               ){
-  char start[16] = "+=====START=====";
-  char final[16] = "+=====FINAL=====";
-  char lost1[16] = "================";
-  char lost2[16] = "=     LOST     =";
-  char lost3[16] = "================";
+  /* char start[16] = "+=====START====="; */
+  /* char final[16] = "+=====FINAL====="; */
+  /* char lost1[16] = "================"; */
+  /* char lost2[16] = "=     LOST     ="; */
+  /* char lost3[16] = "================"; */
 
   int ml = m.length;
   int mcl = m.cars[0].location;
@@ -81,19 +87,13 @@ void draw_map(Map m
 
   //print lost if main car lost
   if(m.cars[0].phase == LOST){
-    for(int i=0; i<16;i++){
-      dpbuffer[DISPLAYLENGTH/2 -1][i] = lost1[i];
-    }
-    for(int i=0; i<16;i++){
-      dpbuffer[DISPLAYLENGTH / 2][i] = lost2[i];
-    }
-    for(int i=0; i<16;i++){
-      dpbuffer[DISPLAYLENGTH/2 +1][i] = lost3[i];
-    }
+    LINE(dpbuffer, DISPLAYLENGTH/2 -1, LOSTL1);
+    LINE(dpbuffer, DISPLAYLENGTH/2 -0, LOSTL2);
+    LINE(dpbuffer, DISPLAYLENGTH/2 +1, LOSTL3);
   }
-
+  else{
   //plot state
-  for (int i=m.state_num-1;i--;i>-1){
+  for (int i=m.state_num-1;i>-1;i--){
     State s = m.states[i];
     char dps = State2char(s.type);
 
@@ -108,7 +108,8 @@ void draw_map(Map m
         if (lidx >= DISPLAYLENGTH) break;
         else if (lidx >= 0){
           for(int widx=s.bias-s.width+(MAXMAPWIDTH/2);widx<s.bias+s.width+(MAXMAPWIDTH/2);widx++){
-            dpbuffer[lidx][widx] = dps;
+            if (widx >=0 && widx < MAXMAPWIDTH)
+              dpbuffer[lidx][widx] = dps;
           }
         }
       }
@@ -118,17 +119,13 @@ void draw_map(Map m
   //plot start line
   if (lb <= 0 && 0 < ub){
     int lidx = (0 - lb) / 10;
-    for (int i=0; i<16; i++){
-      dpbuffer[lidx][i] = start[i];
-    }
+    LINE(dpbuffer, lidx, STARTL);
   }
 
   //plot final line
   if (lb <= ml && ml < ub){
     int lidx = (ml - lb) / 10;
-    for (int i=0; i<16; i++){
-      dpbuffer[lidx][i] = final[i];
-    }
+    LINE(dpbuffer, lidx, FINALL);
   }
 
   //print cars
@@ -141,6 +138,7 @@ void draw_map(Map m
       else
         dpbuffer[lidx][widx] = '@';
     }
+  }
   }
   for(int i=DISPLAYLENGTH-1;i>-1;i--){
 #ifdef ARM

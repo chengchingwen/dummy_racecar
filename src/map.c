@@ -37,14 +37,14 @@ void print_map(Map m){
 Map rand_map(){
   int l, sn, cn;
   l = rand() % MAXMAPLENGTH;
-  sn = rand() % 5 + 10;
+  sn = rand() % 5 + (l / 80);
   cn = rand() % 3 + 1;
   Map m = map(l, sn, cn, rand_car());
   for (int i=1;i<m.car_num;i++)
     m.cars[i] = rand_car();
   m.states = malloc(m.state_num * sizeof(State));
   for (int i=0;i<m.state_num;i++)
-    m.states[i] = rand_state(1000,10);
+    m.states[i] = rand_state(l, MAXMAPWIDTH);
   return m;
 }
 
@@ -95,7 +95,7 @@ int move_car(Map m, int c, int si){
     case BASIN:
       if (!has_attr(m.cars[c], JET_PACK)){
         int mb = rand() % 15 + 10;
-        if (mb < 20){
+        if (mb < 25){
           if (!has_attr(m.cars[c], NAVIGATE)){
             m.cars[c].phase = LOST;
             return 0;

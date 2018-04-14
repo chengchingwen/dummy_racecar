@@ -93,8 +93,10 @@ void update_car(Car * cp, CONTROL ctrl){
   else if (cp->speed < 0){
     cp->speed = 0;
   }
-  if (abs(cp->bias + (MAXMAPWIDTH/2)) > MAXMAPWIDTH){
-    cp->bias /= cp->bias;
-    cp->bias *= MAXMAPWIDTH;
+  if (abs(cp->bias) >= MAXMAPWIDTH/2){
+    if (cp->bias > 0)
+      cp->bias = MAXMAPWIDTH/2 -1;
+    else
+      cp->bias = -MAXMAPWIDTH/2;
   }
 }
