@@ -9,6 +9,11 @@ char LOSTL1[16] = "================";
 char LOSTL2[16] = "=     LOST     =";
 char LOSTL3[16] = "================";
 
+#ifdef ARM
+extern int fd;
+#endif
+
+
 void spark_led(){
 #ifdef ARM
   static unsigned short data;
@@ -54,7 +59,7 @@ void print_time(time_t start
   ioctl(fd, LCD_IOCTL_CUR_SET, &lcd);
   lcd->Count = sprintf((char *) lcd->Msg,
                        "Time: %.2f\n", diff);
-  ioctl(fg, LCD_IOCTL_WRITE, &lcd);
+  ioctl(fd, LCD_IOCTL_WRITE, &lcd);
 #else
   printf("Time: %.2f\n", diff);
 #endif
@@ -144,7 +149,7 @@ void draw_map(Map m
 #ifdef ARM
     lcd->Count = sprintf((char *) lcd->Msg,
                          "%.*s", MAXMAPWIDTH, &dpbuffer[i]);
-    ioctl(fg, LCD_IOCTL_WRITE, &lcd);
+    ioctl(fd, LCD_IOCTL_WRITE, &lcd);
 #else
     printf("%.*s\n", MAXMAPWIDTH, &dpbuffer[i]);
 #endif

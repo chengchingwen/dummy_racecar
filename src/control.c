@@ -2,6 +2,11 @@
 #include<stdlib.h>
 #include "control.h"
 
+#ifdef ARM
+extern int fd;
+#endif
+
+
 CONTROL control(int i){
 #ifdef ARM
   if (i==0){

@@ -3,7 +3,7 @@
 #ifdef ARM
 #include<sys/fcntl.h>
 #include<sys/ioctl.h>
-#include "asm-arm/arch-pxa/lib/creator pxa270 lcd.h"
+#include "asm-arm/arch-pxa/lib/creator_pxa270_lcd.h"
 #endif
 
 #include "param.h"

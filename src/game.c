@@ -15,8 +15,8 @@ void run(Map m){
   time_t start;
 #ifdef ARM
   lcd_write_info_t lcd;
-  if((fd = open(”/dev/lcd”, ORDWR)) < 0){
-    printf(”Open /dev/lcd faild.\n”);
+  if((fd = open("/dev/lcd", O_RDWR)) < 0){
+    printf("Open /dev/lcd faild.\n");
     exit(-1);
   }
   init_lcd();
