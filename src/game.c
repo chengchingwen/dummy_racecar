@@ -12,7 +12,7 @@ int fd;
 void run(Map m){
   // prepare for the game start
   time_t start;
-
+  DPBUFFER(dpbuffer);
   //prepare for arm board lcd
 #ifdef ARM
   lcd_write_info_t lcd;
@@ -31,16 +31,22 @@ void run(Map m){
     //each car move
     for(int c=0;c<m.car_num;c++){
       int si = check_state(m, c);
+      if (c == 0 && si != -1)
+        spark_led();
+
       CONTROL ctrl = control(c);
       move_car(m, c, si, ctrl);
     }
+    //get current map frame
+    getframe(m, dpbuffer);
 
+    //display frame
 #ifdef ARM
     print_time(start, &lcd);
-    draw_map(m, &lcd);
+    draw_map(m, dpbuffer, &lcd);
 #else
     print_time(start);
-    draw_map(m);
+    draw_map(m, dpbuffer);
 #endif
 
     usleep(200000);

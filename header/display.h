@@ -13,6 +13,8 @@
   for (int i=0; i<16; i++) \
     dpbuffer[n][i] = line[i];
 
+#define DPBUFFER(dpbuffer) \
+  char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH];
 
 void spark_led();
 void sevseg(int n);
@@ -26,7 +28,10 @@ void print_time(time_t start
                 ,lcd_write_info_t * lcd
 #endif
                 );
-void draw_map(Map m
+
+void getframe(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]);
+
+void draw_map(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
 #ifdef ARM
               ,lcd_write_info_t * lcd
 #endif

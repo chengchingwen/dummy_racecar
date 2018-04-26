@@ -13,7 +13,6 @@ char LOSTL3[16] = "================";
 extern int fd;
 #endif
 
-
 void spark_led(){
 #ifdef ARM
   static unsigned short data;
@@ -65,22 +64,11 @@ void print_time(time_t start
 #endif
 }
 
-void draw_map(Map m
-#ifdef ARM
-              ,lcd_write_info_t * lcd
-#endif
-              ){
-  /* char start[16] = "+=====START====="; */
-  /* char final[16] = "+=====FINAL====="; */
-  /* char lost1[16] = "================"; */
-  /* char lost2[16] = "=     LOST     ="; */
-  /* char lost3[16] = "================"; */
-
+void getframe(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]){
   int ml = m.length;
   int mcl = m.cars[0].location;
   int lb = mcl-10;
   int ub = mcl+ 10*(DISPLAYLENGTH - 1);
-  char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH];
   if (lb < 0) lb = 0;
 
   //init display buffer
@@ -98,53 +86,63 @@ void draw_map(Map m
   }
   else{
   //plot state
-  for (int i=m.state_num-1;i>-1;i--){
-    State s = m.states[i];
-    char dps = State2char(s.type);
+    for (int i=m.state_num-1;i>-1;i--){
+      State s = m.states[i];
+      char dps = State2char(s.type);
 
-    if (s.type == PLAIN) continue;
+      if (s.type == PLAIN) continue;
 
-    int sub = s.offset+s.length;
-    int slb = s.offset - s.length;
-    if (sub > lb || slb < ub){
-      for(int bl = slb; bl < sub; bl+=10){
-        if (bl > ml) break;
-        int lidx = (bl-lb)/10;
-        if (lidx >= DISPLAYLENGTH) break;
-        else if (lidx >= 0){
-          for(int widx=s.bias-s.width+(MAXMAPWIDTH/2);widx<s.bias+s.width+(MAXMAPWIDTH/2);widx++){
-            if (widx >=0 && widx < MAXMAPWIDTH)
-              dpbuffer[lidx][widx] = dps;
+      int sub = s.offset+s.length;
+      int slb = s.offset - s.length;
+      if (sub > lb || slb < ub){
+        for(int bl = slb; bl < sub; bl+=10){
+          if (bl > ml) break;
+          int lidx = (bl-lb)/10;
+          if (lidx >= DISPLAYLENGTH) break;
+          else if (lidx >= 0){
+            for(int widx=s.bias-s.width+(MAXMAPWIDTH/2);widx<s.bias+s.width+(MAXMAPWIDTH/2);widx++){
+              if (widx >=0 && widx < MAXMAPWIDTH)
+                dpbuffer[lidx][widx] = dps;
+            }
           }
         }
       }
     }
-  }
 
-  //plot start line
-  if (lb <= 0 && 0 < ub){
-    int lidx = (0 - lb) / 10;
-    LINE(dpbuffer, lidx, STARTL);
-  }
+    //plot start line
+    if (lb <= 0 && 0 < ub){
+      int lidx = (0 - lb) / 10;
+      LINE(dpbuffer, lidx, STARTL);
+    }
 
-  //plot final line
-  if (lb <= ml && ml < ub){
-    int lidx = (ml - lb) / 10;
-    LINE(dpbuffer, lidx, FINALL);
-  }
+    //plot final line
+    if (lb <= ml && ml < ub){
+      int lidx = (ml - lb) / 10;
+      LINE(dpbuffer, lidx, FINALL);
+    }
 
-  //print cars
-  for (int i=0;i<m.car_num;i++){
-    if (m.cars[i].location > lb && m.cars[i].location < ub){
-      int lidx = (m.cars[i].location - lb) / 10;
-      int widx = m.cars[i].bias + (MAXMAPWIDTH/2);
-      if (i == 0)
-        dpbuffer[lidx][widx] = '&';
-      else
-        dpbuffer[lidx][widx] = '@';
+    //print cars
+    for (int i=0;i<m.car_num;i++){
+      if (m.cars[i].location > lb && m.cars[i].location < ub){
+        int lidx = (m.cars[i].location - lb) / 10;
+        int widx = m.cars[i].bias + (MAXMAPWIDTH/2);
+        if (i == 0)
+          dpbuffer[lidx][widx] = '&';
+        else
+          dpbuffer[lidx][widx] = '@';
+      }
     }
   }
-  }
+}
+
+
+
+void draw_map(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
+#ifdef ARM
+              ,lcd_write_info_t * lcd
+#endif
+              ){
+
   for(int i=DISPLAYLENGTH-1;i>-1;i--){
 #ifdef ARM
     lcd->Count = sprintf((char *) lcd->Msg,
@@ -157,4 +155,5 @@ void draw_map(Map m
 #ifndef ARM
   printf("\033[15A");
 #endif
+
 }
