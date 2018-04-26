@@ -65,15 +65,13 @@ int check_state(Map m, int c){
   return -1;
 }
 
-int move_car(Map m, int c, int si){
+int move_car(Map m, int c, int si, CONTROL ctrl){
   if (m.cars[c].location > m.length){
     m.cars[c].phase = END;
   }
   Car_phase p = m.cars[c].phase;
   if (p == END)
     return 0;
-
-  CONTROL ctrl = control(c);
 
   if (p == LOST){
     if (ctrl == START){

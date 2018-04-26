@@ -11,8 +11,9 @@ int fd;
 
 void run(Map m){
   // prepare for the game start
-  //bla bla blah
   time_t start;
+
+  //prepare for arm board lcd
 #ifdef ARM
   lcd_write_info_t lcd;
   if((fd = open("/dev/lcd", O_RDWR)) < 0){
@@ -22,14 +23,18 @@ void run(Map m){
   init_lcd();
 #endif
 
-  time( &start);
+  //start time
+  time(&start);
+
+  //game loop
   while (1){
     //each car move
     for(int c=0;c<m.car_num;c++){
-      //check car attribute overcome state
       int si = check_state(m, c);
-      move_car(m, c, si);
+      CONTROL ctrl = control(c);
+      move_car(m, c, si, ctrl);
     }
+
 #ifdef ARM
     print_time(start, &lcd);
     draw_map(m, &lcd);
@@ -37,6 +42,7 @@ void run(Map m){
     print_time(start);
     draw_map(m);
 #endif
+
     usleep(200000);
     if (end(m)){
 #ifndef ARM

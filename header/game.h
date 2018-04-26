@@ -4,6 +4,8 @@
 #include "car.h"
 #include "state.h"
 #include "display.h"
+#include "control.h"
+
 #ifdef ARM
 #include<sys/fcntl.h>
 #include<sys/ioctl.h>

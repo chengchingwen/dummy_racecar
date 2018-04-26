@@ -4,7 +4,6 @@
 #include "car.h"
 #include "control.h"
 
-
 typedef struct map{
   int length;
   int state_num, car_num;
@@ -19,5 +18,4 @@ Map rand_map();
 
 int cover(State s, Car c);
 int check_state(Map m, int i);
-int move_car(Map m, int c, int si);
-
+int move_car(Map m, int c, int si, CONTROL ctrl);
