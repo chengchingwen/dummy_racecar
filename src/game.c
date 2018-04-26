@@ -26,6 +26,9 @@ void run(Map m){
   //start time
   time(&start);
 
+  //show # of cars
+  sevseg(m.car_num);
+
   //game loop
   while (1){
     //each car move
@@ -38,7 +41,7 @@ void run(Map m){
       move_car(m, c, si, ctrl);
     }
     //get current map frame
-    getframe(m, dpbuffer);
+    getframe(m, 0, dpbuffer);
 
     //display frame
 #ifdef ARM

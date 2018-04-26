@@ -64,9 +64,9 @@ void print_time(time_t start
 #endif
 }
 
-void getframe(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]){
+void getframe(Map m, int cn, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]){
   int ml = m.length;
-  int mcl = m.cars[0].location;
+  int mcl = m.cars[cn].location;
   int lb = mcl-10;
   int ub = mcl+ 10*(DISPLAYLENGTH - 1);
   if (lb < 0) lb = 0;
@@ -79,7 +79,7 @@ void getframe(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]){
   }
 
   //print lost if main car lost
-  if(m.cars[0].phase == LOST){
+  if(m.cars[cn].phase == LOST){
     LINE(dpbuffer, DISPLAYLENGTH/2 -1, LOSTL1);
     LINE(dpbuffer, DISPLAYLENGTH/2 -0, LOSTL2);
     LINE(dpbuffer, DISPLAYLENGTH/2 +1, LOSTL3);
@@ -126,7 +126,7 @@ void getframe(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]){
       if (m.cars[i].location > lb && m.cars[i].location < ub){
         int lidx = (m.cars[i].location - lb) / 10;
         int widx = m.cars[i].bias + (MAXMAPWIDTH/2);
-        if (i == 0)
+        if (i == cn)
           dpbuffer[lidx][widx] = '&';
         else
           dpbuffer[lidx][widx] = '@';

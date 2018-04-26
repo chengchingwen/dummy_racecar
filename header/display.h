@@ -29,7 +29,7 @@ void print_time(time_t start
 #endif
                 );
 
-void getframe(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]);
+void getframe(Map m, int cn, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]);
 
 void draw_map(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
 #ifdef ARM
