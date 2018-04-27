@@ -137,7 +137,7 @@ void getframe(Map m, int cn, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]){
 
 
 
-void draw_map(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
+void draw_map(char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
 #ifdef ARM
               ,lcd_write_info_t * lcd
 #endif

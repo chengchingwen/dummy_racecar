@@ -2,15 +2,13 @@
 #include<stdlib.h>
 #include "map.h"
 
-Map map(int l, int sn, int cn, Car c){
+Map map(int l, int sn, int cn){
   Map m = {.length = l,
            .state_num = sn,
            .car_num = cn,
            .states = NULL,
            .cars = NULL
   };
-  m.cars = malloc(m.car_num * sizeof(Car));
-  m.cars[0] = c;
   return m;
 }
 void destroy_map(Map m){
@@ -34,13 +32,26 @@ void print_map(Map m){
   }
 }
 
+Map empty_map(int max_car){
+  int l, sn;
+  l = rand() % MAXMAPLENGTH;
+  sn = rand() % 5 + (l / 80);
+  Map m = map(l, sn, 0);
+  m.cars = malloc(max_car * sizeof(Car));
+  m.states = malloc(m.state_num * sizeof(State));
+  for (int i=0;i<m.state_num;i++)
+    m.states[i] = rand_state(l, MAXMAPWIDTH);
+  return m;
+}
+
 Map rand_map(){
   int l, sn, cn;
   l = rand() % MAXMAPLENGTH;
   sn = rand() % 5 + (l / 80);
   cn = rand() % 3 + 1;
-  Map m = map(l, sn, cn, rand_car());
-  for (int i=1;i<m.car_num;i++)
+  Map m = map(l, sn, cn);
+  m.cars = malloc(m.car_num * sizeof(Car));
+  for (int i=0;i<m.car_num;i++)
     m.cars[i] = rand_car();
   m.states = malloc(m.state_num * sizeof(State));
   for (int i=0;i<m.state_num;i++)

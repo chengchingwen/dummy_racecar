@@ -15,6 +15,8 @@
 
 #define DPBUFFER(dpbuffer) \
   char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH];
+#define DPBUFSIZE DISPLAYLENGTH * MAXMAPWIDTH
+
 
 void spark_led();
 void sevseg(int n);
@@ -31,7 +33,7 @@ void print_time(time_t start
 
 void getframe(Map m, int cn, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]);
 
-void draw_map(Map m, char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
+void draw_map(char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
 #ifdef ARM
               ,lcd_write_info_t * lcd
 #endif

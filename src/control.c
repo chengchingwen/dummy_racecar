@@ -52,7 +52,13 @@ CONTROL arm_control(){
   if (ret < 0)
     return NULLCONTR;
   ret = ioctl(fd, KEY_IOCTL_GET_CHAR, &key);
-  switch(ret){
+  return str2control(ret);
+}
+#endif
+
+CONTROL str2control(char s){
+#ifdef ARM
+  switch(s){
   case VK_S3:
     return FORWARD;
   case VK_S6:
@@ -70,5 +76,67 @@ CONTROL arm_control(){
   default:
     return NULLCONTR;
   }
-}
+#else
+  switch(s){
+  case 'w':
+    return FORWARD;
+  case 'a':
+    return LEFT;
+  case 'd':
+    return RIGHT;
+  case 's':
+    return BACKWARD;
+  case '\n':
+    return START;
+  case 'q':
+    return ATTR1;
+  case 'e':
+    return ATTR2;
+  default:
+    return NULLCONTR;
+  }
 #endif
+}
+
+char ctrl2str(CONTROL ctrl){
+#ifdef ARM
+  switch(ctrl){
+  case FORWARD:
+    return VK_S3;
+  case LEFT:
+    return VK_S6;
+  case RIGHT:
+    return VK_S8;
+  case BACKWARD:
+    return VK_S11;
+  case START:
+    return VK_S7;
+  case ATTR1:
+    return VK_S5;
+  case ATTR2:
+    return VK_S9;
+  default:
+    return '!';
+  }
+#else
+  switch(ctrl){
+  case FORWARD:
+    return 'w';
+  case LEFT:
+    return 'a';
+  case RIGHT:
+    return 'd';
+  case BACKWARD:
+    return 's';
+  case START:
+    return '\n';
+  case ATTR1:
+    return 'q';
+  case ATTR2:
+    return 'e';
+  default:
+    return '!';
+  }
+#endif
+}
+

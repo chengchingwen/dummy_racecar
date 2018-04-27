@@ -23,4 +23,6 @@ CONTROL rand_control();
 CONTROL arm_control();
 #endif
 
+CONTROL str2control(char s);
+char ctrl2str(CONTROL ctrl);
 void print_control(CONTROL c);

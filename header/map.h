@@ -11,9 +11,10 @@ typedef struct map{
   Car* cars;
 }Map;
 
-Map map(int l, int sn, int cn, Car c);
+Map map(int l, int sn, int cn);
 void destroy_map(Map m);
 void print_map(Map m);
+Map empty_map(int max_car);
 Map rand_map();
 
 int cover(State s, Car c);

@@ -8,4 +8,5 @@ int main(){
   Map m = rand_map();
   run(m);
   destroy_map(m);
+  return 0;
 }

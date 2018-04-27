@@ -46,10 +46,10 @@ void run(Map m){
     //display frame
 #ifdef ARM
     print_time(start, &lcd);
-    draw_map(m, dpbuffer, &lcd);
+    draw_map(dpbuffer, &lcd);
 #else
     print_time(start);
-    draw_map(m, dpbuffer);
+    draw_map(dpbuffer);
 #endif
 
     usleep(200000);

@@ -12,6 +12,7 @@
 #include<sys/socket.h>
 #include<sys/types.h>
 #include<sys/wait.h>
+#include<sys/time.h>
 
 #define errexit(format, arg...) exit(printf(format, ##arg))
 
