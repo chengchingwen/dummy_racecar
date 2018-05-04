@@ -13,14 +13,19 @@
 #include<sys/types.h>
 #include<sys/wait.h>
 #include<sys/time.h>
+#include "map.h"
 
 #define errexit(format, arg...) exit(printf(format, ##arg))
 
-/*Createserver*/
-int passivesock(const char* service, const char* transport, int qlen);
+#define SEND(FD, BUF, LEN) if(send(FD, BUF, LEN, 0) != LEN) perror("send");
 
-/*Connecttoserver*/
-int connectsock(const char* host, const char* service, const char* transport);
+#define READ_START(GLEN, FD, BUF, LEN) if((GLEN = read(FD, BUF, LEN)) !=0)
+
+#define READ_END else \
+    break;
+
+int Client(const char* addr, int port);
+int Server(const char * addr, int port, Map m);
 
 #endif
 /*_SOCKOP_H_*/
