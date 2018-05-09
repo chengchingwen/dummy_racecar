@@ -146,10 +146,10 @@ void draw_map(char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
   for(int i=DISPLAYLENGTH-1;i>-1;i--){
 #ifdef ARM
     lcd->Count = sprintf((char *) lcd->Msg,
-                         "%.*s", MAXMAPWIDTH, &dpbuffer[i]);
+                         "%.*s\n", MAXMAPWIDTH, &dpbuffer[i]);
     ioctl(fd, LCD_IOCTL_WRITE, &lcd);
 #else
-    printf("%.*s\n", MAXMAPWIDTH, &dpbuffer[i]);
+    printf("%.*s\n", MAXMAPWIDTH, (char *) &dpbuffer[i]);
 #endif
   }
 #ifndef ARM

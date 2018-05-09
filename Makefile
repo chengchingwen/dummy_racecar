@@ -8,7 +8,7 @@ TESTDIR = test
 ARCH ?= PC
 
 CC = gcc
-CFLAG = -I$(INCDIR) -std=c99
+CFLAG = -I$(INCDIR) -std=gnu99
 
 ifdef DEBUG
 	CFLAG += -g
@@ -51,6 +51,6 @@ client: $(SRCDIR)/racec.c $(OBJ)
 .PHONY: clean
 clean:
 	-@rm -f $(OBJDIR)/*
-
+	-@rm -f client server
 
 
