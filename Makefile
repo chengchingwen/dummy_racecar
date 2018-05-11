@@ -40,7 +40,7 @@ $(OBJDIR):
 $(TEST): % : $(TESTDIR)/%.c $(OBJ)
 	$(CC) $(CFLAG) -o $@  $^
 	@./$@
-	@rm ./$@
+	# @rm ./$@
 
 server: $(SRCDIR)/raced.c $(OBJ)
 	$(CC) $(CFLAG) -o $@ $^
@@ -51,6 +51,6 @@ client: $(SRCDIR)/racec.c $(OBJ)
 .PHONY: clean
 clean:
 	-@rm -f $(OBJDIR)/*
-	-@rm -f client server
+	# -@rm -f client server
 
 

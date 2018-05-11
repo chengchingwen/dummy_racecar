@@ -97,7 +97,7 @@ int Server(const char * addr, int port, Map m){
   int master_socket , addrlen , new_socket , client_socket[30] ,
     max_clients = 30 , activity, valread , sd;
   int max_sd;
-  int E;
+  int E = 0;
   CONTROL ctrl_list[30];
 
   struct sockaddr_in address;

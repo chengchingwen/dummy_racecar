@@ -6,11 +6,6 @@
 
 #include "sockop.h"
 
-
-#ifdef ARM
-int fd;
-#endif
-
 int main(){
   srand(time(NULL));
   Client("127.0.0.1", 8888);
