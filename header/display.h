@@ -10,7 +10,7 @@
 #include "map.h"
 
 #define LINE( dpbuffer, n, line) \
-  for (int i=0; i<16; i++) \
+  for (int i=0; i<MAXMAPWIDTH; i++) \
     dpbuffer[n][i] = line[i];
 
 #define DPBUFFER(dpbuffer) \
@@ -19,6 +19,7 @@
 
 
 void spark_led();
+void turn_off_led();
 void sevseg(int n);
 
 #ifdef ARM

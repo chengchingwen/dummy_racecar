@@ -3,11 +3,11 @@
 #include<time.h>
 #include "display.h"
 
-char STARTL[16] = "+=====START=====";
-char FINALL[16] = "+=====FINAL=====";
-char LOSTL1[16] = "================";
-char LOSTL2[16] = "=     LOST     =";
-char LOSTL3[16] = "================";
+char STARTL[16] = "=====START=====";
+char FINALL[16] = "=====FINAL=====";
+char LOSTL1[16] = "===============";
+char LOSTL2[16] = "=    LOST     =";
+char LOSTL3[16] = "===============";
 
 #ifdef ARM
 extern int fd;
@@ -24,15 +24,35 @@ void spark_led(){
 #endif
 }
 
+void turn_off_led(){
+#ifdef ARM
+  unsigned short data = LED_ALL_OFF;
+  ioctl(fd, LED_IOCTL_SET, &data);
+#else
+  printf("                   ");
+#endif
+}
+
+
 void sevseg(int n){
 #ifdef ARM
   _7seg_info_t data;
   ioctl(fd, _7SEG_IOCTL_ON, NULL);
   data.Mode = _7SEG_MODE_HEX_VALUE;
-  data.Which = _7SEG_D8_INDEX;
-  data.Value = (unsigned long) n;
+  data.Which = _7SEG_D5_INDEX;
+  data.Value = (unsigned long) 0;
   ioctl (fd, _7SEG_IOCTL_SET, &data);
-  ioctl(fd, _7SEG_IOCTL_OFF, NULL);
+  data.Which = _7SEG_D6_INDEX;
+  data.Value = (unsigned long) 0;
+  ioctl (fd, _7SEG_IOCTL_SET, &data);
+  data.Which = _7SEG_D7_INDEX;
+  data.Value = (unsigned long) n/10;
+  ioctl (fd, _7SEG_IOCTL_SET, &data);
+  data.Which = _7SEG_D8_INDEX;
+  data.Value = (unsigned long) n%10;
+  ioctl (fd, _7SEG_IOCTL_SET, &data);
+
+  //ioctl(fd, _7SEG_IOCTL_OFF, NULL);
 #else
   printf("%d cars\n", n);
 #endif
@@ -55,10 +75,10 @@ void print_time(time_t start
   double diff = difftime(now, start);
 #ifdef ARM
   lcd->CursorX = lcd->CursorY = 0;
-  ioctl(fd, LCD_IOCTL_CUR_SET, &lcd);
+  ioctl(fd, LCD_IOCTL_CUR_SET, lcd);
   lcd->Count = sprintf((char *) lcd->Msg,
                        "Time: %.2f\n", diff);
-  ioctl(fd, LCD_IOCTL_WRITE, &lcd);
+  ioctl(fd, LCD_IOCTL_WRITE, lcd);
 #else
   printf("Time: %.2f\n", diff);
 #endif
@@ -157,7 +177,7 @@ void draw_map(char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
 #endif
   }
 #ifdef ARM
-  ioctl(fd, LCD_IOCTL_WRITE, &lcd);
+  ioctl(fd, LCD_IOCTL_WRITE, lcd);
 #else
   printf("\033[15A");
 #endif

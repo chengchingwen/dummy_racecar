@@ -21,14 +21,13 @@ void run(Map m){
     exit(-1);
   }
   init_lcd();
+  ioctl(fd, KEY_IOCTL_CLEAR, NULL);
 #endif
-
   //start time
   time(&start);
 
   //show # of cars
   sevseg(m.car_num);
-
   //game loop
   while (1){
     //each car move
@@ -36,7 +35,9 @@ void run(Map m){
       int si = check_state(m, c);
       if (c == 0 && si != -1)
         spark_led();
-
+      else
+	turn_off_led();
+      
       CONTROL ctrl = control(c);
       move_car(m, c, si, ctrl);
     }

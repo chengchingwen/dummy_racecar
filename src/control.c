@@ -48,95 +48,57 @@ void print_control(CONTROL c){
 CONTROL arm_control(){
   unsigned short key;
   int ret;
-  ret =  ioctl(fd, KEY_IOCTL_CLEAR, &key);
-  if (ret < 0)
-    return NULLCONTR;
-  ret = ioctl(fd, KEY_IOCTL_GET_CHAR, &key);
-  return str2control(ret);
+  for(int i=0;i<5000;i++){
+    ret = ioctl(fd, KEY_IOCTL_CHECK_EMTPY, &key);
+    if(ret < 0){
+      continue;
+    }
+    ret = ioctl(fd, KEY_IOCTL_GET_CHAR, &key);
+    return str2control(key & 0xff);
+  }
+  return NULLCONTR;
 }
 #endif
 
 CONTROL str2control(char s){
-#ifdef ARM
   switch(s){
-  case VK_S3:
+  case '2':
     return FORWARD;
-  case VK_S6:
+  case '4':
     return LEFT;
-  case VK_S8:
+  case '6':
     return RIGHT;
-  case VK_S11:
+  case '8':
     return BACKWARD;
-  case VK_S7:
+  case '5':
     return START;
-  case VK_S5:
+  case '1':
     return ATTR1;
-  case VK_S9:
+  case '3':
     return ATTR2;
   default:
     return NULLCONTR;
   }
-#else
-  switch(s){
-  case 'w':
-    return FORWARD;
-  case 'a':
-    return LEFT;
-  case 'd':
-    return RIGHT;
-  case 's':
-    return BACKWARD;
-  case '\n':
-    return START;
-  case 'q':
-    return ATTR1;
-  case 'e':
-    return ATTR2;
-  default:
-    return NULLCONTR;
-  }
-#endif
 }
 
 char ctrl2str(CONTROL ctrl){
-#ifdef ARM
   switch(ctrl){
   case FORWARD:
-    return VK_S3;
+    return '2';
   case LEFT:
-    return VK_S6;
+    return '4';
   case RIGHT:
-    return VK_S8;
+    return '6';
   case BACKWARD:
-    return VK_S11;
+    return '8';
   case START:
-    return VK_S7;
+    return '5';
   case ATTR1:
-    return VK_S5;
+    return '1';
   case ATTR2:
-    return VK_S9;
+    return '3';
   default:
     return '!';
   }
-#else
-  switch(ctrl){
-  case FORWARD:
-    return 'w';
-  case LEFT:
-    return 'a';
-  case RIGHT:
-    return 'd';
-  case BACKWARD:
-    return 's';
-  case START:
-    return '\n';
-  case ATTR1:
-    return 'q';
-  case ATTR2:
-    return 'e';
-  default:
-    return '!';
-  }
-#endif
 }
 

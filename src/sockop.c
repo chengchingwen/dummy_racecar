@@ -32,6 +32,7 @@ int Client(const char* addr, int port){
   int E;
   time_t start;
   DPBUFFER(dpbuffer);
+  char sendbuf[3];
   //prepare for arm board lcd
 #ifdef ARM
   lcd_write_info_t lcd;
@@ -40,6 +41,7 @@ int Client(const char* addr, int port){
     exit(-1);
   }
   init_lcd();
+  ioctl(fd, KEY_IOCTL_CLEAR, NULL);
 #endif
 
   int readn;
@@ -48,8 +50,8 @@ int Client(const char* addr, int port){
   //recv(sockfd, dpbuffer[0], 2, 0);
   while(1){
     CONTROL ctrl = control(0);
-    dpbuffer[0][0] = ctrl2str(ctrl);
-    SEND(sockfd, dpbuffer, 1);
+    sendbuf[0] = ctrl2str(ctrl);
+    SEND(sockfd, sendbuf, 1);
 
     READ_START(readn, sockfd, dpbuffer[0], 2) {
       dpbuffer[0][readn] = '\0';
@@ -60,6 +62,8 @@ int Client(const char* addr, int port){
       dpbuffer[0][readn] = '\0';
       if(atoi(dpbuffer[0]) == 1)
         spark_led();
+      else
+	turn_off_led();
     } READ_END;
 
     READ_START(readn, sockfd, dpbuffer, DPBUFSIZE){
@@ -73,7 +77,7 @@ int Client(const char* addr, int port){
 #endif
     } READ_END;
 
-    usleep(200000);
+    usleep(50000);
 
     READ_START(readn, sockfd, dpbuffer, 1){
       E = dpbuffer[0][0] - '0';

@@ -8,6 +8,6 @@
 
 int main(){
   srand(time(NULL));
-  Client("127.0.0.1", 8888);
+  Client("192.168.0.170", 8888);
   return 0;
 }
