@@ -21,6 +21,8 @@ CONTROL rand_control();
 
 #ifdef ARM
 CONTROL arm_control();
+#else
+CONTROL pc_control();
 #endif
 
 CONTROL str2control(char s);

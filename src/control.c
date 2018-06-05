@@ -1,18 +1,97 @@
 #include<stdio.h>
 #include<stdlib.h>
+
+#ifndef ARM
+#include <termios.h>
+#include <unistd.h>
+#include <sys/select.h>
+#endif
+
 #include "control.h"
 
 #ifdef ARM
 extern int fd;
 #endif
 
+#ifndef ARM
+void set_mode(int want_key)
+{
+	static struct termios old, new;
+	if (!want_key) {
+		tcsetattr(STDIN_FILENO, TCSANOW, &old);
+		return;
+	}
 
-CONTROL control(int i){
-#ifdef ARM
-  if (i==0){
-    return arm_control();
+	tcgetattr(STDIN_FILENO, &old);
+	new = old;
+	new.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &new);
+}
+
+int get_key()
+{
+	int c = 0;
+	struct timeval tv;
+	fd_set fs;
+	tv.tv_usec = tv.tv_sec = 0;
+
+	FD_ZERO(&fs);
+	FD_SET(STDIN_FILENO, &fs);
+	select(STDIN_FILENO + 1, &fs, 0, 0, &tv);
+
+	if (FD_ISSET(STDIN_FILENO, &fs)) {
+		c = getchar();
+  
+	}
+	return c;
+}
+
+char pc_map(char c){
+  switch(c){
+  case 'w':
+    return '2';
+  case 'a':
+    return '4';
+  case 'd':
+    return '6';
+  case 's':
+    return '8';
+  case 'x':
+    return '5';
+  case 'q':
+    return '1';
+  case 'e':
+    return '3';
+  default:
+    return '!';
   }
+
+}
+
+
+CONTROL pc_control(){
+  set_mode(1);
+  char c;
+  for (int i=0;i<5000;i++){
+    c = get_key();
+    if (c!=0){
+      c = pc_map(c);
+      set_mode(0);
+      return str2control(c);
+    }
+  }
+  set_mode(0);
+  return NULLCONTR;
+}
 #endif
+CONTROL control(int i){
+  if (i==0){
+#ifdef ARM
+    return arm_control();
+#else
+    return pc_control();
+#endif
+  }
   return rand_control();
 }
 

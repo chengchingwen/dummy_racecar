@@ -51,8 +51,6 @@ void sevseg(int n){
   data.Which = _7SEG_D8_INDEX;
   data.Value = (unsigned long) n%10;
   ioctl (fd, _7SEG_IOCTL_SET, &data);
-
-  //ioctl(fd, _7SEG_IOCTL_OFF, NULL);
 #else
   printf("%d cars\n", n);
 #endif
@@ -168,10 +166,10 @@ void draw_map(char dpbuffer[DISPLAYLENGTH][MAXMAPWIDTH]
     lcd->Count += (MAXMAPWIDTH+1);
     /* lcd->Count = sprintf((char *) lcd->Msg, */
     /*                      "%.*s\n", MAXMAPWIDTH, (char *) &dpbuffer[i]); */
+    /* ioctl(fd, LCD_IOCTL_WRITE, &lcd); */
     for(int j=0;j<MAXMAPWIDTH;j++)
       lcd->Msg[(DISPLAYLENGTH - i - 1)*(MAXMAPWIDTH+1) + j] = dpbuffer[i][j];
     lcd->Msg[(DISPLAYLENGTH - i - 1)*(MAXMAPWIDTH+1) + MAXMAPWIDTH] = '\n';
-    /* ioctl(fd, LCD_IOCTL_WRITE, &lcd); */
 #else
     printf("%.*s\n", MAXMAPWIDTH, (char *) &dpbuffer[i]);
 #endif
