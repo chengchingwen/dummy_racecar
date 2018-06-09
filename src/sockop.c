@@ -4,8 +4,14 @@
 #include<unistd.h>
 #include<time.h>
 
+//fake
+#include<pthread.h>
+
 #include "sockop.h"
 #include "game.h"
+
+//fake
+pthread_mutex_t mutex;
 
 #ifdef ARM
 extern int fd;
@@ -201,9 +207,17 @@ int Server(const char * addr, int port, Map m){
         //if position is empty
         if( client_socket[i] == 0 ){
           client_socket[i] = new_socket;
+
+          //fake
+          pthread_mutex_lock(&mutex);
+
           m.car_num += 1;
           m.cars[i] = rand_car();
           printf("Adding to list of sockets as %d\n" , i);
+
+          //fake
+          pthread_mutex_unlock(&mutex);
+
           break;
         }
       }
@@ -225,6 +239,10 @@ int Server(const char * addr, int port, Map m){
           client_socket[i] = 0;
         }
         else{
+
+          //fake
+          pthread_mutex_lock(&mutex);
+
           sprintf(rcbuf,"%2d", m.car_num);
           SEND(sd, rcbuf, 2);
 
@@ -250,6 +268,10 @@ int Server(const char * addr, int port, Map m){
 
           sprintf(rcbuf,"%d", E);
           SEND(sd, rcbuf, 1);
+
+          //fake
+          pthread_mutex_unlock(&mutex);
+
         }
       }
     }
