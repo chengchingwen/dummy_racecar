@@ -76,6 +76,27 @@ int check_state(Map m, int c){
   return -1;
 }
 
+int has_car(Map m, int cn, int l, int b){
+  int mcl = m.cars[cn].location;
+  int lb = mcl-10;
+  int ub = mcl+ 10*(DISPLAYLENGTH - 1);
+  if (lb < 0) lb = 0;
+  int nl = (l - lb) / 10;
+  int nb = b + (MAXMAPWIDTH/2);
+
+  for (int i=0;i<m.car_num;i++){
+    if (m.cars[i].location > lb && m.cars[i].location < ub && i != cn){
+      int lidx = (m.cars[i].location - lb) / 10;
+      int widx = m.cars[i].bias + (MAXMAPWIDTH/2);
+
+      if (nl == lidx && nb == widx){
+        return lidx * 10 - 1 + lb;
+      }
+    }
+  }
+  return 0;
+}
+
 int move_car(Map m, int c, int si, CONTROL ctrl){
   if (m.cars[c].location > m.length){
     m.cars[c].phase = END;
@@ -141,6 +162,19 @@ int move_car(Map m, int c, int si, CONTROL ctrl){
   else{
     m.cars[c].location += speed;
   }
+  int old_l = m.cars[c].location;
+  int old_b = m.cars[c].bias;
   update_car(&m.cars[c], ctrl);
+  int new_l = m.cars[c].location;
+  int new_b = m.cars[c].bias;
+  int U_bound;
+  if (U_bound = has_car(m, c, new_l, new_b)){
+    if (old_b == new_b){
+      m.cars[c].location = U_bound;
+    }
+    else{
+      m.cars[c].bias = old_b;
+    }
+  }
   return 0;
 }
