@@ -29,7 +29,7 @@ void turn_off_led(){
   unsigned short data = LED_ALL_OFF;
   ioctl(fd, LED_IOCTL_SET, &data);
 #else
-  printf("                   ");
+  printf(" ");
 #endif
 }
 

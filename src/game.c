@@ -36,8 +36,8 @@ void run(Map m){
       if (c == 0 && si != -1)
         spark_led();
       else
-	turn_off_led();
-      
+        turn_off_led();
+
       CONTROL ctrl = control(c);
       move_car(m, c, si, ctrl);
     }
