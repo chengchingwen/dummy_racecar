@@ -21,7 +21,7 @@ endif
 
 
 
-TARGET = state car attribute map control game display sockop
+TARGET = state car attribute map control game display sockop sh
 OBJ = $(TARGET:%=$(OBJDIR)/%.o)
 SRC = $(TARGET:%=$(SRCDIR)/%.c)
 TEST = $(TARGET:%=test_%)
@@ -40,7 +40,7 @@ $(OBJDIR):
 $(TEST): % : $(TESTDIR)/%.c $(OBJ)
 	$(CC) $(CFLAG) -o $@  $^
 	@./$@
-	# @rm ./$@
+	@rm ./$@
 
 server: $(SRCDIR)/raced.c $(OBJ)
 	$(CC) $(CFLAG) -o $@ $^

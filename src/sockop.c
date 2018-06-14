@@ -9,6 +9,7 @@
 
 #include "sockop.h"
 #include "game.h"
+#include "sh.h"
 
 //fake
 pthread_mutex_t mutex;
@@ -16,6 +17,9 @@ pthread_mutex_t mutex;
 #ifdef ARM
 extern int fd;
 #endif
+
+extern int END_GAME;
+
 
 int Client(const char* addr, int port){
   int sockfd;
@@ -83,7 +87,7 @@ int Client(const char* addr, int port){
 #endif
     } READ_END;
 
-    usleep(50000);
+    usleep(1000);
 
     READ_START(readn, sockfd, dpbuffer, 1){
       E = dpbuffer[0][0] - '0';
@@ -158,6 +162,15 @@ int Server(const char * addr, int port, Map m){
   //accept the incoming connection
   addrlen = sizeof(address);
   puts("Waiting for connections ...");
+
+  //boom handler
+  struct sigaction sa;
+  memset(&sa, 0, sizeof(sa));
+  sa.sa_handler = &boomed;
+  sigaction(SIGVTALRM, &sa, NULL);
+  init_queue(&m);
+  //end handler
+  signal(SIGUSR1, end_game);
 
   DPBUFFER(sendbuf);
 
@@ -264,6 +277,7 @@ int Server(const char * addr, int port, Map m){
           //of the data read
           getframe(m, i, sendbuf);
           SEND(sd, sendbuf, DPBUFSIZE);
+          sb_win(m);
           E = end(m);
 
           sprintf(rcbuf,"%d", E);
@@ -276,7 +290,7 @@ int Server(const char * addr, int port, Map m){
       }
     }
 
-    if (E){
+    if (E || END_GAME){
       break;
     }
   }

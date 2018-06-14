@@ -2,18 +2,31 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<time.h>
+#include<string.h>
 #include "game.h"
+
+#include "sh.h"
 
 #ifdef ARM
 int fd;
 #endif
-
+extern int END_GAME;
 
 void run(Map m){
   // prepare for the game start
   time_t start;
-  DPBUFFER(dpbuffer);
+
+  //boom handler
+  struct sigaction sa;
+  memset(&sa, 0, sizeof(sa));
+  sa.sa_handler = &boomed;
+  sigaction(SIGVTALRM, &sa, NULL);
+  init_queue(&m);
+  //end handler
+  signal(SIGUSR1, end_game);
+  
   //prepare for arm board lcd
+  DPBUFFER(dpbuffer);
 #ifdef ARM
   lcd_write_info_t lcd;
   if((fd = open("/dev/lcd", O_RDWR)) < 0){
@@ -54,7 +67,8 @@ void run(Map m){
 #endif
 
     usleep(200000);
-    if (end(m)){
+    sb_win(m);
+    if (end(m) || END_GAME){
 #ifndef ARM
       printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 #endif
@@ -70,4 +84,12 @@ int end(Map m){
       cnt++;
   }
   return cnt == m.car_num;
+}
+
+void sb_win(Map m){
+  for (int c=0;c<m.car_num;c++){
+    if (m.cars[c].phase == END){
+      kill(getpid(), SIGUSR1);
+    }
+  }
 }

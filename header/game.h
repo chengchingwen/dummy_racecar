@@ -5,6 +5,7 @@
 #include "state.h"
 #include "display.h"
 #include "control.h"
+#include "sh.h"
 
 #ifdef ARM
 #include<sys/fcntl.h>
@@ -16,3 +17,4 @@
 
 void run(Map m);
 int end(Map m);
+void sb_win(Map m);

@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include "map.h"
+#include "sh.h"
 
 Map map(int l, int sn, int cn){
   Map m = {.length = l,
@@ -165,6 +166,14 @@ int move_car(Map m, int c, int si, CONTROL ctrl){
   else{
     m.cars[c].location += speed;
   }
+
+  if (ctrl == ATTR1 || ctrl == ATTR2)
+    if (si != -1)
+      if (m.states[si].type == BARRIER && has_attr(m.cars[c], BOOM)){
+        printf("setting boom\n");
+        set_boom(si);
+      }
+
   int old_l = m.cars[c].location;
   int old_b = m.cars[c].bias;
   update_car(&m.cars[c], ctrl);

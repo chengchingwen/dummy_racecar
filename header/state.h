@@ -7,7 +7,8 @@ typedef enum {
   BASIN,
   POOL,
   RAINING,
-  BARRIER
+  BARRIER,
+  NULLState
 }State_type ;
 
 
@@ -30,3 +31,4 @@ State rand_state_wo_barrier(int maplength, int mapwidth);
 State rand_barrier(int maplength, int mapwidth);
 void print_state(State s);
 char State2char(State_type st);
+State nullstate();
