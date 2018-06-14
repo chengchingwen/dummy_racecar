@@ -41,7 +41,6 @@ int get_key()
 
 	if (FD_ISSET(STDIN_FILENO, &fs)) {
 		c = getchar();
-  
 	}
 	return c;
 }
@@ -84,6 +83,7 @@ CONTROL pc_control(){
   return NULLCONTR;
 }
 #endif
+
 CONTROL control(int i){
   if (i==0){
 #ifdef ARM
@@ -94,7 +94,6 @@ CONTROL control(int i){
   }
   return rand_control();
 }
-
 
 CONTROL rand_control(){
   int r = rand() % 4 + 1;

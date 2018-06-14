@@ -27,6 +27,8 @@ void print_attr(Attr a){
     printf("FUEL_EFFICIENT\n");break;
   case JET_PACK:
     printf("JET_PACK\n");break;
+  case BOOM:
+    printf("BOOM\n");break;
   }
 }
 

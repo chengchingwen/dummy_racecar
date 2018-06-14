@@ -1,5 +1,5 @@
 #pragma once
-#define ATTRTYPENUM 6
+#define ATTRTYPENUM 7
 
 typedef enum{
   NULL_ATTR,
@@ -7,7 +7,8 @@ typedef enum{
   WATER_PROOF,
   NAVIGATE,
   FUEL_EFFICIENT,
-  JET_PACK
+  JET_PACK,
+  BOOM
 }Attr_type;
 
 

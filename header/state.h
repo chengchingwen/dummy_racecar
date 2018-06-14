@@ -1,12 +1,13 @@
 #pragma once
-#define STATETYPENUM 5
+#define STATETYPENUM 6
 
 typedef enum {
   PLAIN,
   HILL,
   BASIN,
   POOL,
-  RAINING
+  RAINING,
+  BARRIER
 }State_type ;
 
 
@@ -25,5 +26,7 @@ State state(int o,
             State_type t);
 
 State rand_state(int maplength, int mapwidth);
+State rand_state_wo_barrier(int maplength, int mapwidth);
+State rand_barrier(int maplength, int mapwidth);
 void print_state(State s);
 char State2char(State_type st);

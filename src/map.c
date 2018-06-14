@@ -48,6 +48,7 @@ Map rand_map(){
   int l, sn, cn;
   l = rand() % MAXMAPLENGTH;
   sn = rand() % 5 + (l / 80);
+  sn *= 5;
   cn = rand() % 3 + 1;
   Map m = map(l, sn, cn);
   m.cars = malloc(m.car_num * sizeof(Car));
@@ -148,13 +149,15 @@ int move_car(Map m, int c, int si, CONTROL ctrl){
         speed = ((rand() % 2 + 1) * speed);
       }
       break;
+    case BARRIER:
+      speed = 0;
     default:
       break;
     }
   }
   if (has_attr(m.cars[c], SPEED_UP)){
     int so10 = speed / 10;
-    if (so10 <1){
+    if (so10 <1 && speed != 0){
       so10 = 1;
     }
     m.cars[c].location += (speed + so10);
